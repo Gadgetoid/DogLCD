@@ -38,6 +38,8 @@ Install the doglcd module and use as follows:
 
 Usage
 =====
+These are the doglcd functions you can use,
+anything not listed here may have unexpected results
 
 reset()
 -------
@@ -86,11 +88,6 @@ rightToLeft() / leftToRight()
 -----------------------------
 Change text direction
 
-setContrast(contrast)
----------------------
-Change the contrast
-Valid values from 0 to 0x3F
-
 writeChar(int)
 --------------
 Write a valid single char from 0 to 255
@@ -111,23 +108,23 @@ DOG LCD Data Pinout
 -------------------
 
 TOP LEFT
-40 : RST, Reset : Pull to VCC
-39 : RS, Register Select ( Low = Command / High = Data ) -> Pi
-38 : CSB, Chip Select -> Pi
-37 : RW ( Low = Write / High = Read ) : Pull to GND
-36 : E, Enable : Pull to VCC
-35 : D0 : Pull to VCC
-34 : D1 : Pull to VCC
-33 : D2 : Pull to VCC
-32 : D3 : Pull to VCC
-31 : D4 : Pull to VCC
-30 : D5 : Pull to VCC
-29 : D6 : CLK, Clock -> Pi
-28 : D7 : SI, Serial Input -> Pi
-27 : GND
-26 : VCC
-25 : Voltage Booster IN : Pull to VCC
-24 : Voltage Booster OUT : Bridge to 25 with 0.1uF Cap
-23 : PSB ( Low = Serial / High = Parallel ) : Pull to GND
-22 : Voltage Booster +
-21 : Voltage Booster - : Bridge to 22 with 0.1uF Cap
+* 40 : RST, Reset : Pull to VCC
+* 39 : RS, Register Select ( Low = Command / High = Data ) -> Pi
+* 38 : CSB, Chip Select -> Pi
+* 37 : RW ( Low = Write / High = Read ) : Pull to GND
+* 36 : E, Enable : Pull to VCC
+* 35 : D0 : Pull to VCC
+* 34 : D1 : Pull to VCC
+* 33 : D2 : Pull to VCC
+* 32 : D3 : Pull to VCC
+* 31 : D4 : Pull to VCC
+* 30 : D5 : Pull to VCC
+* 29 : D6 : CLK, Clock -> Pi
+* 28 : D7 : SI, Serial Input -> Pi
+* 27 : GND
+* 26 : VCC
+* 25 : Voltage Booster IN : Pull to VCC
+* 24 : Voltage Booster OUT : Bridge to 25 with 0.1uF Cap
+* 23 : PSB ( Low = Serial / High = Parallel ) : Pull to GND
+* 22 : Voltage Booster +
+* 21 : Voltage Booster - : Bridge to 22 with 0.1uF Cap
