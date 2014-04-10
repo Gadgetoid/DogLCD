@@ -1,0 +1,7 @@
+Change Log
+==========
+
+1.0-dev
+-------
+- Initial development/beta release
+- Only tested against DOGM163E-A @ 3.3v
