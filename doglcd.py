@@ -36,6 +36,8 @@ class DogLCD:
 		self.lcdReset = pin_reset
 		self.lcdBacklight = pin_backlight
 
+		self.animations = [[],[],[],[],[],[],[],[]]
+
 	def begin(self, model, contrast):
 
 		self.model = model
@@ -206,6 +208,20 @@ class DogLCD:
 
 	def doubleHeightBottom(self):
 		self.writeCommand(0b00010000,30)
+
+	def createAnimation(self, anim_pos, anim_map, frame_rate):
+		self.createChar(anim_pos, anim_map[0])
+		self.animations[anim_pos] = [anim_map,frame_rate]
+		self.setCursor(0,1)
+	
+	def updateAnimations(self):
+		for i,animation in enumerate(self.animations):
+			if len(animation) == 2:
+				anim = animation[0]
+				fps = animation[1]
+				frame = anim[ int(round(time.time()*fps) % len(anim)) ]
+				self.createChar(i,frame)
+		self.setCursor(0,1)
 
 	def createChar(self, char_pos, char_map):
 		if(char_pos<0 or char_pos>7):
