@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import atexit, time
+import spidev, atexit, time
 import RPi.GPIO as GPIO
 
 DOG_LCD_M081 = 1
@@ -22,12 +22,18 @@ DOG_LCD_BLINK_ON = 0x01
 DOG_LCD_SCROLL_LEFT = 0x18
 DOG_LCD_SCROLL_RIGHT = 0x1C
 
-
+enable_hw_spi = True
+hw_spi_speed = 1000000
 
 class DogLCD:
 	def __init__(self, lcdSI, lcdCLK, lcdRS, lcdCSB, pin_reset, pin_backlight):
 		GPIO.setmode(GPIO.BCM)
 		GPIO.setwarnings(False)
+
+		if enable_hw_spi:
+			self.spi = spidev.SpiDev()
+			self.spi.open(0, 0)
+			self.spi.max_speed_hz = hw_spi_speed
 
 		self.lcdSI = lcdSI
 		self.lcdCLK = lcdCLK
@@ -81,13 +87,14 @@ class DogLCD:
 			return False
 
 		self.contrast = contrast
-
-		GPIO.setup(self.lcdCSB,GPIO.OUT);
-		GPIO.output(self.lcdCSB,GPIO.HIGH);
-		GPIO.setup(self.lcdSI,GPIO.OUT);
-		GPIO.output(self.lcdSI,GPIO.HIGH);
-		GPIO.setup(self.lcdCLK,GPIO.OUT);
-		GPIO.output(self.lcdCLK,GPIO.HIGH);
+		
+		if not enable_hw_spi:
+			GPIO.setup(self.lcdCSB,GPIO.OUT);
+			GPIO.output(self.lcdCSB,GPIO.HIGH);
+			GPIO.setup(self.lcdSI,GPIO.OUT);
+			GPIO.output(self.lcdSI,GPIO.HIGH);
+			GPIO.setup(self.lcdCLK,GPIO.OUT);
+			GPIO.output(self.lcdCLK,GPIO.HIGH);
 		GPIO.setup(self.lcdRS,GPIO.OUT);
 		GPIO.output(self.lcdRS,GPIO.HIGH);
 
@@ -262,6 +269,12 @@ class DogLCD:
 		self.spiTransfer(value,delay)
 
 	def spiTransfer(self, value, delay):
+		if enable_hw_spi:
+			#value = self.ReverseBits( value )
+			self.spi.xfer( [ value ] )
+			self.delayMicroseconds( delay )
+			return True
+
 		# Ensure Clock starts high
 		GPIO.output(self.lcdCLK,GPIO.HIGH)
 

@@ -11,8 +11,18 @@ import doglcd, datetime, time
 # RST    -1
 # BL     -1
 #
-lcd = doglcd.DogLCD(21,22,24,23,-1,-1)
+lcd = doglcd.DogLCD(10,11,25,8,-1,-1)
+lcd2 = doglcd.DogLCD(10,11,25,7,-1,-1)
+#lcd = doglcd.DogLCD(21,22,24,23,-1,-1)
+#lcd2 = doglcd.DogLCD(21,22,24,18,-1,-1)
+
 lcd.begin(doglcd.DOG_LCD_M163, 0x28)
+lcd2.begin(doglcd.DOG_LCD_M163, 0x28)
+
+lcd2.clear()
+lcd2.home()
+lcd2.write('OMG! Second LCD')
+
 lcd.clear()
 lcd.home()
 lcd.write(chr(0) + 'OMG! Such time' + chr(0))
