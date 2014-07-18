@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import doglcd, datetime, time
+import doglcd, datetime, time, dogbl, threading
 
 # __init__(self, lcdSI, lcdCLK, lcdRS, lcdCSB, pin_reset, pin_backlight):
 # pin   wpi   bcm
@@ -29,6 +29,53 @@ lcd.write(chr(0) + 'OMG! Such time' + chr(0))
 lcd.setCursor(0,2)
 lcd.write(chr(1) + chr(4) + ' Very Wow! ' + chr(3) + chr(2) + chr(5))
 
+bl = dogbl.DogBL(1)
+bl.RGB(100,0,50)
+bl.update()
+
+class StoppableThread(threading.Thread):
+	def __init__(self):
+		threading.Thread.__init__(self)
+		self.stop_event = threading.Event()
+		self.daemon = True
+
+	def start(self):
+		if not self.isAlive():
+			self.stop_event.clear()
+			threading.Thread.start(self)
+
+	
+	def stop(self):
+		if self.isAlive():
+			self.stop_event.set()
+			self.join()
+
+
+class AsyncWorker(StoppableThread):
+	def __init__(self, fn):
+		StoppableThread.__init__(self)
+		self.fn = fn
+		self.iterations = 0
+
+	def run(self):
+		while not self.stop_event.is_set():
+			if not self.fn(self.iterations):
+				break
+			self.iterations += 1
+
+def dosweep(i):
+	hue = i%360
+	bl.sweep(hue,20)
+	time.sleep(0.05)
+	return True
+
+blfade = AsyncWorker(dosweep)
+
+try:
+	blfade.start()
+except KeyboardInterrupt:
+	blfade.stop()
+	raise
 
 pirate = [
 	[0x00,0x1f,0x0b,0x03,0x00,0x04,0x11,0x1f],

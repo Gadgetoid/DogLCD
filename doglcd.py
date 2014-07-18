@@ -25,7 +25,8 @@ DOG_LCD_SCROLL_RIGHT = 0x1C
 enable_hw_spi = True
 hw_spi_speed = 1000000
 
-class DogLCD:
+
+class DogLCD():
 	def __init__(self, lcdSI, lcdCLK, lcdRS, lcdCSB, pin_reset, pin_backlight):
 		GPIO.setmode(GPIO.BCM)
 		GPIO.setwarnings(False)

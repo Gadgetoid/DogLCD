@@ -42,6 +42,6 @@ setup(name		= 'DogLCD',
 	keywords	= 'Raspberry Pi DOGLCD LCD',
 	url		= 'http://www.pimoroni.com',
 	classifiers     = classifiers,
-	py_modules	= ['doglcd'],
+	py_modules	= ['doglcd','dogbl','colorsys'],
 	install_requires= ['rpi.gpio >= 0.5.4']
 )
