@@ -33,7 +33,7 @@ classifiers = ['Development Status :: 4 - Beta',
                'Topic :: System :: Hardware']
 
 setup(name		= 'DogLCD',
-	version		= '1.0dev',
+	version		= '1.1dev',
 	author		= 'Philip Howard',
 	author_email	= 'phil@gadgetoid.com',
 	description	= 'A module to control a DOG LCD from the Raspberry Pi',
@@ -42,6 +42,6 @@ setup(name		= 'DogLCD',
 	keywords	= 'Raspberry Pi DOGLCD LCD',
 	url		= 'http://www.pimoroni.com',
 	classifiers     = classifiers,
-	py_modules	= ['doglcd','dogbl','colorsys'],
-	install_requires= ['rpi.gpio >= 0.5.4']
+	py_modules	= ['doglcd','dogbl'],
+	install_requires = ['rpi.gpio >= 0.5.4', 'spidev >= 2.0', 'sn3218 >= 1.1dev']
 )

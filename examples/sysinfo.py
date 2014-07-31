@@ -12,7 +12,8 @@ def get_ip_address(ifname):
 	except IOError:
 		return ifname + ' not found!'
 
-lcd = doglcd.DogLCD(21,22,24,18,-1,-1)
+lcd = doglcd.DogLCD(10,11,25,8,-1,-1)
+#lcd = doglcd.DogLCD(21,22,24,18,-1,-1)
 
 # Testing rig only, remove for production
 # second LCD goes potty if you don't

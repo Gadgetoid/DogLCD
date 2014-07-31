@@ -1,11 +1,11 @@
-# Sample script for PiGlow that creates a continuous whirly vortex animation
+# Sample script for sn3218 that creates a continuous whirly vortex animation
 #
-# Please see our GitHub repository for more information: https://github.com/pimoroni/piglow
+# Please see our GitHub repository for more information: https://github.com/pimoroni/sn3218
 #
 # Once running you'll need to press ctrl-C to cancel stop the script
 
 import time
-from piglow import PiGlow
+from sn3218 import sn3218
 import colorsys
 
 LED_R_R = 0x00
@@ -20,13 +20,13 @@ LED_L_R = 0x06
 LED_L_B = 0x07
 LED_L_G = 0x08
 
-class DogBL(PiGlow):
+class DogBL(sn3218):
 	i2c_addr = 0x54 # fixed i2c address of SN3218 ic
 	bus = None
 	leds = [0x00] * 18
 
 	def __init__(self, i2c_bus=1):
-		PiGlow.__init__(self, i2c_bus)
+		sn3218.__init__(self, i2c_bus)
 
 	def setBar(self, index, value):
 		for i, v in enumerate(value):
@@ -62,16 +62,19 @@ class DogBL(PiGlow):
 		self.set(LED_L_R, r)
 		self.set(LED_L_B, b)
 		self.set(LED_L_G, g)
+		self.update()
 
 	def midRGB( self, r, g, b ):
 		self.set(LED_M_R, r)
 		self.set(LED_M_B, b)
 		self.set(LED_M_G, g)
+		self.update()
 
 	def rightRGB( self, r, g, b ):
 		self.set(LED_R_R, r)
 		self.set(LED_R_B, b)
 		self.set(LED_R_G, g)
+		self.update()
 
 	def RGB( self, r, g, b ):
 		self.leftRGB( r, g, b )
@@ -79,4 +82,4 @@ class DogBL(PiGlow):
 		self.rightRGB( r, g, b)
 
 	def update(self):
-		PiGlow.update(self)
+		sn3218.update(self)
