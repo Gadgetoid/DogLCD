@@ -1,6 +1,4 @@
-import doglcd, psutil, time, datetime, math
-
-import socket, fcntl, struct
+import doglcd, dogbl, threading, psutil, time, datetime, math, socket, fcntl, struct
 
 def get_ip_address(ifname):
 	try:
@@ -13,18 +11,6 @@ def get_ip_address(ifname):
 		return ifname + ' not found!'
 
 lcd = doglcd.DogLCD(10,11,25,8,-1,-1)
-#lcd = doglcd.DogLCD(21,22,24,18,-1,-1)
-
-# Testing rig only, remove for production
-# second LCD goes potty if you don't
-# pull down its CSB pin!
-alt = doglcd.DogLCD(21,22,24,23,-1,-1)
-alt.begin(doglcd.DOG_LCD_M163, 0x28)
-alt.clear()
-alt.home()
-alt.noCursor()
-alt.noDoubleHeight()
-alt.noAutoscroll()
 
 lcd.begin(doglcd.DOG_LCD_M163, 0x28)
 lcd.clear()
@@ -32,6 +18,54 @@ lcd.home()
 lcd.noCursor()
 lcd.noDoubleHeight()
 lcd.noAutoscroll()
+
+bl = dogbl.DogBL(1)
+bl.RGB(100,0,50)
+bl.update()
+
+class StoppableThread(threading.Thread):
+	def __init__(self):
+		threading.Thread.__init__(self)
+		self.stop_event = threading.Event()
+		self.daemon = True
+
+	def start(self):
+		if not self.isAlive():
+			self.stop_event.clear()
+			threading.Thread.start(self)
+
+	
+	def stop(self):
+		if self.isAlive():
+			self.stop_event.set()
+			self.join()
+
+
+class AsyncWorker(StoppableThread):
+	def __init__(self, fn):
+		StoppableThread.__init__(self)
+		self.fn = fn
+		self.iterations = 0
+
+	def run(self):
+		while not self.stop_event.is_set():
+			if not self.fn(self.iterations):
+				break
+			self.iterations += 1
+
+def dosweep(i):
+	hue = i%360
+	bl.sweep(hue,20)
+	time.sleep(0.05)
+	return True
+
+blfade = AsyncWorker(dosweep)
+
+try:
+	blfade.start()
+except KeyboardInterrupt:
+	blfade.stop()
+	raise
 
 DOG_LCD_CHEVRON_L = 0b11111011
 DOG_LCD_CHEVRON_R = 0b11111100
@@ -54,11 +88,11 @@ graph_steps = [2,95,3,4,45,5,6,255]
 graph_text = []
 
 while 1:
-	alt.setCursor(0,0)
-	alt.write(get_ip_address('eth0'))
+	#lcd.setCursor(0,0)
+	#lcd.write(get_ip_address('eth0'))
 
-	alt.setCursor(0,1)
-	alt.write(get_ip_address('wlan0'))
+	#lcd.setCursor(0,1)
+	#lcd.write(get_ip_address('wlan0'))
 
 	ip = psutil.net_connections(kind='inet4')
 	mem = psutil.virtual_memory()

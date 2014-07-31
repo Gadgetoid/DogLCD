@@ -2,26 +2,9 @@
 
 import doglcd, datetime, time, dogbl, threading
 
-# __init__(self, lcdSI, lcdCLK, lcdRS, lcdCSB, pin_reset, pin_backlight):
-# pin   wpi   bcm
-# SI      2   27 rev 2, 21 rev 1
-# CLK     3   22
-# RS      5   24
-# CSB     4   23
-# RST    -1
-# BL     -1
-#
 lcd = doglcd.DogLCD(10,11,25,8,-1,-1)
-lcd2 = doglcd.DogLCD(10,11,25,7,-1,-1)
-#lcd = doglcd.DogLCD(21,22,24,23,-1,-1)
-#lcd2 = doglcd.DogLCD(21,22,24,18,-1,-1)
 
 lcd.begin(doglcd.DOG_LCD_M163, 0x28)
-lcd2.begin(doglcd.DOG_LCD_M163, 0x28)
-
-lcd2.clear()
-lcd2.home()
-lcd2.write('OMG! Second LCD')
 
 lcd.clear()
 lcd.home()
