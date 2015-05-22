@@ -1,3 +1,7 @@
+# Note
+
+This library is unmaintained and obsolete, you should probably use our ST7036 Driver instead, which you can find here: https://github.com/pimoroni/st7036
+
 DOG LCD Python for Raspberry Pi
 ===============================
 
